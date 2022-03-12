@@ -1,5 +1,15 @@
 const fontSizeArray = [16, 20, 24, 28];
 const storage = localStorage;
+const scale = document.getElementById("scale");
+const container = document.getElementById("containter")
+const isX = false; // 横書きなら true
+const scale_p_ruby = document.getElementById("scale_p_ruby");
+const rubyLineHeight = isX ? scale_p_ruby.clientHeight : scale_p_ruby.clientWidth; // 一行の高さ（ルビあり）
+const maxWidth = isX ? scale.clientWidth : scale.clientHeight; // 縦書きの場合は反転
+const maxHeight = isX ? scale.clientHeight : scale.clientWidth;
+const fontSizeNum = parseInt(storage.sprFontSize);
+const fontSize = fontSizeArray[fontSizeNum];
+const maxChars = Math.floor(maxWidth / fontSize); // 1行あたりの最大文字数
 
 if(storage.sprColor === undefined){
     storage.sprColor = "black";

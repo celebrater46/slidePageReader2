@@ -81,12 +81,34 @@ const getFileName = (path) => {
     }
 }
 
+const createDivs = (pages) => {
+    let pageNum = 0;
+    pages.map((page) => {
+        const div = document.createElement("div");
+        div.classList.add("page");
+        const divInDiv = document.createElement("div");
+        divInDiv.id = "p-" + pageNum;
+        page.lines.map((line) => {
+            const p = document.createElement("p");
+            p.innerHTML = encodeRuby(line);
+            divInDiv.appendChild(p);
+            // console.log(line);
+            // console.log(p);
+        });
+        // console.log(divInDiv);
+        div.appendChild(divInDiv);
+        container.appendChild(div);
+        pageNum++;
+    });
+}
+
 const init = async() => {
     const id = getId();
     const articleNum = getArticleNum();
     const listObj = await getList();
     const fileName = getFileName(listObj[id].path);
-    const reload = allowReload(listObj[id].ver, fileName);
+    // const reload = allowReload(listObj[id].ver, fileName);
+    const reload = true;
     let book = {};
     if(reload){
         book = await createBook(listObj[id].path);
@@ -108,7 +130,16 @@ const init = async() => {
         if(subTitle !== null){
             await addTitlePage(subTitle, 2);
         }
-        await asyncCreatePages(book.articles[i].plane);
+        const articlePages = new ArticlePages(fontSize, maxWidth, maxHeight);
+        // await articlePages.asyncCreatePages(book.articles[i].plane);
+        await articlePages.asyncCreatePages(book.articles[i].lines);
+        // console.log("book.articles[i].lines: ");
+        // console.log(book.articles[i].lines);
+        // console.log("book.articles[i]: ");
+        // console.log(book.articles[i]);
+        console.log("articlePages:");
+        console.log(articlePages);
+        createDivs(articlePages.pageObjs);
         articlePagesArray.push(container.childElementCount + 1);
     }
     articlePagesArray.pop();

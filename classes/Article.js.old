@@ -4,8 +4,7 @@ class Article {
         this.chapter = this.getChapter(text);
         this.title = this.getTitle(text);
         this.plane = this.getText(text);
-        // this.pages = [];
-        this.lines = this.getLines(text);
+        this.pages = [];
     }
 
     getChapter(text){
@@ -18,20 +17,10 @@ class Article {
         return sub === null ? null : sub[0].replace(/<Sub>(.*)<\/Sub>/i, "$1");
     }
 
-    getText(text){
+    getText(text) {
         let str = text.replace(/((\r\n)*|(\r)*|(\n)*)<Title>(.*)<\/Title>((\r\n)*|(\r)*|(\n)*)/gi, "");
         str = str.replace(/((\r\n)*|(\r)*|(\n)*)<Chapter>(.*)<\/Chapter>((\r\n)*|(\r)*|(\n)*)/gi, "");
         str = str.replace(/((\r\n)*|(\r)*|(\n)*)<Sub>(.*)<\/Sub>((\r\n)*|(\r)*|(\n)*)/gi, "");
         return str;
-    }
-
-    getLines(text){
-        // console.log("did getLines()");
-        const str = this.getText(text);
-        const br = checkBrCode(str);
-        const array = str.split(br);
-        return array.map((line) => {
-            return line === "" ? "　" : line;
-        });
     }
 }
